@@ -12,3 +12,6 @@
 ### 3 실행
 > python app_sessions.py
 
+# 구성도
+![챗봇방어 (1)](https://github.com/BoB-Dev-Top30/LLM_Security/assets/109223193/aa67358a-f794-4b9d-9b1c-7b059a0ac09a)
+
