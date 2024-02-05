@@ -15,7 +15,7 @@ from llama_index.vector_stores.pinecone import PineconeVectorStore
 from llama_index import SimpleDirectoryReader
 ###################
 def RAG(user_input):
-    documents = SimpleDirectoryReader("C:\github\LLM_Security\data").load_data()
+    documents = SimpleDirectoryReader("../LLM_Security/data").load_data()
     # pc = Pinecone(api_key=config.PINECONE_API_KEY)
     pinecone.init(api_key=config.PINECONE_API_KEY, environment="gcp-starter")
 
