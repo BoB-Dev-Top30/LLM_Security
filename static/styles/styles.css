@@ -1,0 +1,97 @@
+body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif; /* Modern and readable font */
+    background-color: #f4f4f4; /* Light background for the whole page */
+}
+
+#chat-container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 10px;
+    overflow-y: auto;
+    background-color: #ffffff; /* White background for the chat container */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Adds subtle shadow around the chat container */
+    border-radius: 8px; /* Rounded corners for the chat container */
+}
+
+.chat-message {
+    margin-bottom: 15px;
+    padding: 15px;
+    border-radius: 20px; /* More pronounced rounded corners for chat messages */
+    word-wrap: break-word;
+    font-size: 16px; /* Larger font size for better readability */
+}
+
+.user {
+    background-color: #007bff; /* Brighter shade of blue for user messages */
+    color: white;
+    text-align: left;
+    align-self: flex-end;
+}
+
+.chatbot {
+    background-color: #e9ecef; /* Lighter grey for chatbot messages, improving contrast */
+    color: #333; /* Darker text for better readability */
+    align-self: flex-start;
+}
+
+.loading {
+    background-color: #f8f9fa;
+    color: #6c757d; /* Muted loading text color */
+    align-self: flex-start;
+}
+
+.loading-dots::before {
+    animation: dots 1s infinite; /* Faster animation for loading dots */
+}
+
+@keyframes dots {
+    0%, 20%, 100% { opacity: 0; }
+    50% { opacity: 1; }
+}
+
+#user-input-form {
+    display: flex;
+    margin-top: 20px; /* Ensures spacing between chat and input form */
+}
+
+#user-input {
+    flex: 1;
+    padding: 10px;
+    border: 2px solid #007bff; /* Stylish border color */
+    border-radius: 20px; /* Rounded input field */
+    margin-right: 10px; /* Spacing between input field and submit button */
+}
+
+#submit-button {
+    padding: 10px 20px;
+    background-color: #28a745; /* Green color for the button, indicating action */
+    color: white;
+    border-radius: 20px; /* Consistent rounded corners */
+    cursor: pointer;
+    border: none; /* Removes default border */
+    transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
+#submit-button:hover {
+    background-color: #218838; /* Darker shade on hover for visual feedback */
+}
+
+/* Responsive design adjustments */
+@media (max-width: 768px) {
+    #chat-container {
+        margin: 10px;
+    }
+
+    .chat-message {
+        padding: 10px; /* Slightly reduce padding for smaller screens */
+    }
+
+    #user-input-form {
+        flex-direction: column; /* Stack input field and button on small screens */
+    }
+
+    #user-input {
+        margin-bottom: 10px; /* Adds spacing between input and button on small screens */
+    }
+}
