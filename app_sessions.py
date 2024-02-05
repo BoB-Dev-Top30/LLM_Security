@@ -9,12 +9,25 @@ from config.config import *
 import time
 import openai
 import sqlite3
-
+import pinecone
 import json
 
+### 패키지 & 모듈###########
+from pseudonymization.pseudonymization import *
+from Vector_DB.RAG import *
+from Security_LLM.Security_LLM import *
 
+# from pinecone import Pinecone
+
+from llama_index import GPTListIndex, ServiceContext, StorageContext, GPTVectorStoreIndex, set_global_service_context, download_loader
+
+from llama_index.llms import OpenAI
+
+from llama_index.vector_stores import PineconeVectorStore
+
+from llama_index import SimpleDirectoryReader
+pinecone_api_key = config.PINECONE_API_KEY
 load_dotenv()
-
 app = Flask(__name__, static_folder='static')
 port = os.getenv('PORT', 5000)
 
@@ -34,8 +47,10 @@ conn.commit()
 
 MAX_HISTORY_LENGTH=10
 
-#conversation_history = []
-#conversation_seq=0
+# pc = Pinecone(api_key=config.PINECONE_API_KEY)
+pinecone.init(api_key=config.PINECONE_API_KEY, environment="gcp-starter")
+
+# pinecone_index = pc.Index(host='https://bobsecurity-5e6a870.svc.gcp-starter.pinecone.io')
 
 def get_recent_conversation():
     cursor.execute("SELECT * FROM conversation ORDER By id DESC LIMIT 10")
@@ -48,6 +63,15 @@ def chat():
     user_input = request.json['userInput']
     print(f' => 사용자 요청: {user_input}')
 
+    # 첫번째 체인
+    user_input = pseudonymization(user_input)
+
+    # 두번째 체인
+    user_input = Security_LLM(user_input)
+
+    # 세번째 체인
+    ans = RAG(user_input)
+
     # 이전 대화 내용 추가
     # conversation_history.append({'role':'user','content':user_input})
     cursor.execute("INSERT INTO conversation (role, content) VALUES (?, ?)", ('user', user_input))
@@ -56,7 +80,9 @@ def chat():
     conversation_history = get_recent_conversation()
     print(f'=> 실제 프롬프트 요청:{conversation_history}')
 
-    chatgpt_response = get_chat_gpt_response(conversation_history)
+    # 벡터 DB 값 Insert
+    chatgpt_response = str(ans)
+    # chatgpt_response = get_chat_gpt_response(conversation_history)
     print(f'<= 챗지피티 응답:{chatgpt_response}')
 
     cursor.execute("INSERT INTO conversation (role, content) VALUES (?, ?)", ('assistant', chatgpt_response))
